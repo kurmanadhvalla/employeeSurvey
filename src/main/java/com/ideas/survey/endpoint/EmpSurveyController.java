@@ -44,8 +44,7 @@ public class EmpSurveyController {
 	  
 	  
 	  
-	  @RequestMapping("/count")
-	  
+	  @RequestMapping("/count")	  
 	  public int getCount(){
 		  return  (int) aspectRepository.count();
 	  }
