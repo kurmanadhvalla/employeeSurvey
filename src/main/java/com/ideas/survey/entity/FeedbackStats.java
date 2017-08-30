@@ -16,7 +16,11 @@ public class FeedbackStats implements Serializable {
 	
 	
 	
- 	public FeedbackStats() {
+ 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public FeedbackStats() {
 		super();
 	}
 	@Id
