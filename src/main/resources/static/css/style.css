@@ -1,9 +1,8 @@
 #row{
   text-align: center;
   margin-top: 50px;
-	margin-bottom: 30px;
+	margin-bottom: 100px;
 }
-
 #backImg{
   margin-top: 20px;
   height: 15%;
@@ -14,17 +13,57 @@
 	margin-top: 50px;
 	margin-bottom: 30px;
 }
+
+.star-rating{
+  margin-bottom: 5px;
+}
+.star-rating span{
+  font-size:20px;
+}
+
+
 .panel-heading{
   text-align: center;
   margin-top: 5px;
 	margin-bottom: 5px;
-  height: 40px;
+  min-height: 40px;
+  max-height: 180px;
   background-color: #92bde7;
 }
 body {
   background: white;
   min-height: 520px;
 }
+
+
+
+
+li {
+    margin: 1px;
+
+    padding:2px;
+    vertical-align:middle;
+}
+
+li span {
+  color: gray;
+  font-size: 1.1em;
+  margin-right: 5px;
+  margin-left: 5px;
+  cursor: pointer;
+
+}
+
+input[type="text"] {
+    /*width: 32px;*/
+    margin-right: 5px;
+    border: 1px solid lightgay;
+    color: blue;
+    text-align: center;
+}
+
+
+
 
 body,
 h1,

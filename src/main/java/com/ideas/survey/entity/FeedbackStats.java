@@ -31,32 +31,40 @@ public class FeedbackStats implements Serializable {
 // 	 @Column(name="survey_id")
 //	 private Integer survey_id;
  	 @Column(name="aspect_rating")
-	 private Integer aspect_rating;
+	 private Integer aspectRating;
  	 @Column(name="aspect_ranking")
-	 private Integer aspect_ranking;
+	 private Integer aspectRanking;
 	 @ManyToOne
 	 @JoinColumn(name="aspect_id")
 	 private Aspects aspect;
 	 @ManyToOne
 	 @JoinColumn(name="survey_id")
-	 private Employeefeedback emp_fdback;
+	 private EmployeeSurvey employeeSurvey;
+
+	public FeedbackStats(Integer aspectRating, Integer aspectRanking, Aspects aspect, EmployeeSurvey employeeSurvey) {
+		this.aspectRating = aspectRating;
+		this.aspectRanking = aspectRanking;
+		this.aspect = aspect;
+		this.employeeSurvey = employeeSurvey;
+	}
+
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Integer getAspect_rating() {
-		return aspect_rating;
+	public Integer getAspectRating() {
+		return aspectRating;
 	}
-	public void setAspect_rating(Integer aspect_rating) {
-		this.aspect_rating = aspect_rating;
+	public void setAspectRating(Integer aspectRating) {
+		this.aspectRating = aspectRating;
 	}
-	public Integer getAspect_ranking() {
-		return aspect_ranking;
+	public Integer getAspectRanking() {
+		return aspectRanking;
 	}
-	public void setAspect_ranking(Integer aspect_ranking) {
-		this.aspect_ranking = aspect_ranking;
+	public void setAspectRanking(Integer aspectRanking) {
+		this.aspectRanking = aspectRanking;
 	}
 	public Aspects getAspect() {
 		return aspect;
@@ -64,11 +72,11 @@ public class FeedbackStats implements Serializable {
 	public void setAspect(Aspects aspect) {
 		this.aspect = aspect;
 	}
-	public Employeefeedback getEmp_fdback() {
-		return emp_fdback;
+	public EmployeeSurvey getEmployeeSurvey() {
+		return employeeSurvey;
 	}
-	public void setEmp_fdback(Employeefeedback emp_fdback) {
-		this.emp_fdback = emp_fdback;
+	public void setEmployeeSurvey(EmployeeSurvey employeeSurvey) {
+		this.employeeSurvey = employeeSurvey;
 	}
   
 }

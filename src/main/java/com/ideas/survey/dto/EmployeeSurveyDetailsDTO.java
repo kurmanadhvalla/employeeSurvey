@@ -3,7 +3,7 @@ package com.ideas.survey.dto;
 /**
  * Created by idnvlr on 8/31/2017.
  */
-public class EmployeeSurvey {
+public class EmployeeSurveyDetailsDTO {
 
 
     String empID;

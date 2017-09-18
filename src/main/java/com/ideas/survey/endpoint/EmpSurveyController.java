@@ -2,10 +2,9 @@ package com.ideas.survey.endpoint;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.*;
 
-import com.ideas.survey.dto.EmployeeSurvey;
+import com.ideas.survey.dto.EmployeeSurveyDetailsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ideas.survey.entity.AspectRepository;
 import com.ideas.survey.entity.Aspects;
-import com.ideas.survey.entity.Employeefeedback;
-import com.ideas.survey.entity.EmployeefeedbackRepository;
+import com.ideas.survey.entity.EmployeeSurvey;
+import com.ideas.survey.entity.EmployeeSurveyRepository;
 import com.ideas.survey.entity.FeedbackStats;
 import com.ideas.survey.entity.FeedbackstatsRepository;
 
@@ -25,128 +24,132 @@ import com.ideas.survey.entity.FeedbackstatsRepository;
 @RestController
 @RequestMapping("/survey")
 public class EmpSurveyController {
-	
-	@Autowired private AspectRepository aspectRepository ;
-	@Autowired private EmployeefeedbackRepository employee_feedbackRepository;
-    @Autowired private FeedbackstatsRepository feedback_repository;
 
-	@Autowired
-	JdbcTemplate jdbcTemplate;
+    @Autowired
+    private AspectRepository aspectRepository;
+    @Autowired
+    private EmployeeSurveyRepository employeeSurveyRepository;
+    @Autowired
+    private FeedbackstatsRepository feedbackstatsRepository;
 
-
-	@RequestMapping("/allSurveys")
-	public List<Employeefeedback> getSurveys()
-	{
-		Iterable<Employeefeedback> Surveys = employee_feedbackRepository.findAll();
-		List<Employeefeedback> target1 = new ArrayList<>();
-		Surveys.forEach(target1::add);
-		return target1;
-	}
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
 
+    @RequestMapping("/allSurveys")
+    public List<EmployeeSurvey> getSurveys() {
+        Iterable<EmployeeSurvey> Surveys = employeeSurveyRepository.findAll();
+        List<EmployeeSurvey> target1 = new ArrayList<>();
+        Surveys.forEach(target1::add);
+        return target1;
+    }
 
 
-	@RequestMapping("/allStats")
-	public List<FeedbackStats> getStats()
-	{
-		Iterable<FeedbackStats> Stats = feedback_repository.findAll();
-		List<FeedbackStats> target2 = new ArrayList<>();
-		Stats.forEach(target2::add);
-		return target2;
-	}
+    @RequestMapping("/allStats")
+    public List<FeedbackStats> getStats() {
+        Iterable<FeedbackStats> Stats = feedbackstatsRepository.findAll();
+        List<FeedbackStats> target2 = new ArrayList<>();
+        Stats.forEach(target2::add);
+        return target2;
+    }
 
 
-	@RequestMapping("/allAspects")
-		public List<Aspects> getAspects()
-		{
-			Iterable<Aspects> itAscpects = aspectRepository.findAll();
-			List<Aspects> target = new ArrayList<>();
-			itAscpects.forEach(target::add);
-			return target;
-		}
-	@RequestMapping("/save")
-	public Aspects saveEmployee(@RequestParam("aspect") String aspect)
-	{
-		return aspectRepository.save(new Aspects(aspect));
-	}
+    @RequestMapping("/allAspects")
+    public List<Aspects> getAspects() {
+        Iterable<Aspects> itAscpects = aspectRepository.findAll();
+        List<Aspects> target = new ArrayList<>();
+        itAscpects.forEach(target::add);
+        return target;
+    }
 
 
-	@RequestMapping("/updateRating")
-	public void updateRating(@RequestParam("empID") String empid,@RequestParam("surveyID") String surveyID, @RequestParam("aspectID") String aspectID, @RequestParam("rating") String rating)
-	{
+    @RequestMapping("/save")
+    public Aspects saveEmployee(@RequestParam("aspect") String aspect) {
+        return aspectRepository.save(new Aspects(aspect));
+    }
 
-		jdbcTemplate.update(
-				"UPDATE `employee_feedback_stats` SET aspect_rating =? WHERE survey_id=? AND aspect_id=?;",rating,surveyID,aspectID);
+    @RequestMapping("/setTime")
+    public void setTime(@RequestParam("empID") String empid, @RequestParam("surveyID") String surveyID) {
+//		System.out.println(empid + " " + surveyID);
+        Date date = new Date();
+        jdbcTemplate.update("UPDATE `employee_feedback` SET \n" +
+                "submission_date = ? ,status= 1 WHERE empid =? AND survey_id = ?;", new Object[]{date, empid, surveyID});
+       System .out.println("it worked!");
+    }
 
-	}
-
-	  @RequestMapping("/getSurvey")
-			public List<EmployeeSurvey> getEmployeeSurvey(@RequestParam("empID") String empid)
-			{
-				ArrayList<EmployeeSurvey> employeeSurveys = new ArrayList<>();
- 				// ifEMpdoesNotexit
-//				 populate with materdata
-
-				FetchData(empid, employeeSurveys);
-//
-                if (employeeSurveys.size()==0)
-				{
-					LocalDate date = LocalDate.now();
-					final Integer[] survey_id = {null};
-					jdbcTemplate.update("INSERT INTO `employee_feedback`(creation_date,empid,STATUS,submission_date) VALUES(?,?,0,?);",new Object[]{date ,empid,date});
-					jdbcTemplate.query("SELECT survey_id FROM `employee_feedback` WHERE empid =?;", new Object[]{empid}, new RowMapper<Integer>() {
-						@Override
-						public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
-							survey_id[0] = rs.getInt(1);
-
-							return survey_id[0];
-						}
-
-					});
-					for (int i = 1; i <=10; i++) {
-						jdbcTemplate.update("\n" +
-								"INSERT INTO `employee_feedback_stats`(aspect_ranking ,aspect_rating,aspect_id,survey_id)\n" +
-								"VALUES(?,?,?,?);",new Object[]{i,1,i, survey_id[0]});
-					}
-					FetchData(empid, employeeSurveys);
+    @RequestMapping("/updateRating")
+    public void updateRating(@RequestParam("empID") String empid, @RequestParam("surveyID") Integer surveyID, @RequestParam("aspectID") Integer aspectID, @RequestParam("rating") Integer rating) {
+        FeedbackStats feedbackStats = feedbackstatsRepository.findByEmployeeSurvey_surveyIdAndAspect_aspectId(surveyID, aspectID);
+        feedbackStats.setAspectRating(rating);
+        feedbackstatsRepository.save(feedbackStats);
+    }
 
 
-				}
+    @RequestMapping("/getSurvey")
+    public List<EmployeeSurveyDetailsDTO> getEmployeeSurvey(@RequestParam("empID") String empid) {
 
-				return employeeSurveys;
+        List<EmployeeSurvey> employeeSurveys = employeeSurveyRepository.findByEmpidAndStatus(empid, false);
+        if (employeeSurveys != null && !employeeSurveys.isEmpty()) {
+            List<FeedbackStats> feedbackStats = employeeSurveys.get(0).getFeedbackStats();
+            return getEmployeeSurveyDetailsDTO(feedbackStats);
+        } else {
+            return getNewSurvey(empid);
+        }
+    }
+
+    List<EmployeeSurveyDetailsDTO> getEmployeeSurveyDetailsDTO(List<FeedbackStats> feedbackStats) {
+        ArrayList<EmployeeSurveyDetailsDTO> employeeSurveyDetailsDTOS = new ArrayList<>();
+        feedbackStats.forEach(feedbackStat -> {
+            EmployeeSurveyDetailsDTO dto = new EmployeeSurveyDetailsDTO();
+            EmployeeSurveyDetailsDTO employeeSurveyDetailsDTO = new EmployeeSurveyDetailsDTO();
+            employeeSurveyDetailsDTO.setEmpID(feedbackStat.getEmployeeSurvey().getEmpid());
+            employeeSurveyDetailsDTO.setSurveyID(feedbackStat.getEmployeeSurvey().getSurveyId());
+            employeeSurveyDetailsDTO.setAspectID(feedbackStat.getAspect().getAspectId());
+            employeeSurveyDetailsDTO.setAspectName(feedbackStat.getAspect().getAspectName());
+            employeeSurveyDetailsDTO.setRating(feedbackStat.getAspectRating());
+            employeeSurveyDetailsDTO.setRanking(feedbackStat.getAspectRanking());
+            employeeSurveyDetailsDTOS.add(employeeSurveyDetailsDTO);
+        });
+        return employeeSurveyDetailsDTOS;
+    }
+
+    @RequestMapping("/getNewSurvey")
+    public List<EmployeeSurveyDetailsDTO> getNewSurvey(@RequestParam("empID") String empid) {
+        Date date = new Date();
+        EmployeeSurvey survey = employeeSurveyRepository.save(new EmployeeSurvey(empid, date, false));
+        int rating = 1;
+        int ranking = 1;
+        Iterable<Aspects> allAspects = aspectRepository.findAll();
+        for (Aspects aspect : allAspects) {
+            feedbackstatsRepository.save(new FeedbackStats(rating, ranking, aspect, survey));
+            ranking++;
+        }
+        List<FeedbackStats> feedbackStats = feedbackstatsRepository.findByEmployeeSurvey(survey);
+        return getEmployeeSurveyDetailsDTO(feedbackStats);
+    }
+
+@RequestMapping("/saveEmpSurvey")
+public EmployeeSurvey saveEmployeeSurvey(@RequestParam("empID") String empid) {
+        Date date = new Date();
+        return employeeSurveyRepository.save(new EmployeeSurvey(empid, date,false));
+    }
+
+
+@RequestMapping("/getAllSurveys")
+public List<List<EmployeeSurveyDetailsDTO>> getAllSurveysofEmployee(@RequestParam("empID") String empid)
+{
+    List<EmployeeSurvey> employeeSurveys = employeeSurveyRepository.findByEmpidAndStatus(empid, true);
+    List<List<EmployeeSurveyDetailsDTO>> finallist = new ArrayList<>();
+    for(int i=0;i<employeeSurveys.size();i++)
+    {
+        List<FeedbackStats> feedbackStats = employeeSurveys.get(i).getFeedbackStats();
+       finallist.add(getEmployeeSurveyDetailsDTO(feedbackStats)) ;
+    }
+   return finallist;
 }
 
-	private void FetchData(@RequestParam("empID") String empid, ArrayList<EmployeeSurvey> employeeSurveys) {
-		jdbcTemplate.query(" SELECT empid,survey_id,aspect_id, aspect,aspect_rating,aspect_ranking FROM `employee_feedback_stats` \n" +
-                        " INNER JOIN `aspects` USING (aspect_id)\n" +
-                        " INNER JOIN `employee_feedback` USING (survey_id) where empid =?", new  Object[] { empid }, new RowMapper<EmployeeSurvey>() {
-                    @Override
-                    public EmployeeSurvey mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        EmployeeSurvey employeeSurvey = new EmployeeSurvey();
-                        employeeSurvey.setEmpID(rs.getNString(1));
-                        employeeSurvey.setSurveyID(rs.getInt(2));
-                        employeeSurvey.setAspectID(rs.getInt(3));
-                        employeeSurvey.setAspectName(rs.getNString(4));
-                        employeeSurvey.setRating(rs.getInt(5));
-                        employeeSurvey.setRanking(rs.getInt(6));
+    class MyRankingComp extends com.ideas.survey.endpoint.MyRankingComp {
 
-                        employeeSurveys.add(employeeSurvey);
-
-                       Collections.sort(employeeSurveys,new MyRankingComp());
-
-
-
-
-                        return employeeSurvey;
-                    }
-                }
-        );
-	}
-
-
-
-	class MyRankingComp extends com.ideas.survey.endpoint.MyRankingComp {
-
-	}
+    }
 
 }

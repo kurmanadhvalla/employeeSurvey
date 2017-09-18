@@ -3,10 +3,7 @@ package com.ideas.survey.entity;
 
 
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Aspects implements Serializable {
@@ -16,8 +13,10 @@ public class Aspects implements Serializable {
 	private static final long serialVersionUID = 1L;
 		@Id
 	    @GeneratedValue(strategy=GenerationType.AUTO)
-	    private Integer aspect_id;	 	
-	 	private String aspect;
+		@Column(name ="aspect_id")
+	    private Integer aspectId;
+		@Column(name ="aspect")
+	 	private String aspectName;
 //	 	@OneToMany(mappedBy="aspects", fetch = FetchType.LAZY)
 //	 	private Set<Feedback_Stats> Surveys = new HashSet<>(0);
 //      
@@ -34,25 +33,25 @@ public class Aspects implements Serializable {
 			super();
 		}
 
-		public Aspects(String aspect) {
+		public Aspects(String aspectName) {
 			super();
-			this.aspect = aspect;
+			this.aspectName = aspectName;
 		}
 
-		public Integer getAspect_id() {
-			return aspect_id;
+		public Integer getAspectId() {
+			return aspectId;
 		}
 
-		public void setAspect_id(Integer aspect_id) {
-			this.aspect_id = aspect_id;
+		public void setAspectId(Integer aspectId) {
+			this.aspectId = aspectId;
 		}
 
-		public String getAspect() {
-			return aspect;
+		public String getAspectName() {
+			return aspectName;
 		}
 
-		public void setAspect(String aspect) {
-			this.aspect = aspect;
+		public void setAspectName(String aspectName) {
+			this.aspectName = aspectName;
 		}
 
 	 	

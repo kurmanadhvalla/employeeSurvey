@@ -3,4 +3,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface AspectRepository extends CrudRepository<Aspects, Long> {
 
+    Aspects findByAspectName(String work);
 }
