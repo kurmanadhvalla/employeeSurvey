@@ -1,4 +1,4 @@
-package com.ideas.survey.endpoint;
+package com.ideas.survey.service;
 
 import com.ideas.survey.dto.EmployeeSurveyDetailsDTO;
 

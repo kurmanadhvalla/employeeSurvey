@@ -1,5 +1,8 @@
 package com.ideas.survey.dto;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 /**
  * Created by idnvlr on 8/31/2017.
  */
@@ -23,6 +26,44 @@ public class EmployeeSurveyDetailsDTO {
 
     Integer rating;
     Integer ranking;
+    String  ratingreason;
+    String submissionDate;
+    String AspectDescription;
+
+    public String getAspectDescription() {
+        return AspectDescription;
+    }
+
+    public void setAspectDescription(String aspectDescription) {
+        AspectDescription = aspectDescription;
+    }
+
+    public String getSubmissionDate() {
+        return submissionDate;
+    }
+
+    public void setSubmissionDate(String submissionDate) {
+        this.submissionDate =(submissionDate == null) ? "not submitted" : submissionDate;
+
+    }
+
+    public ArrayList<String> getDirectReports() {
+        return directReports;
+    }
+
+    public void setDirectReports(ArrayList<String> directReports) {
+        this.directReports = directReports;
+    }
+
+    ArrayList<String> directReports;
+    public String getRatingreason() {
+        return ratingreason;
+    }
+
+    public void setRatingreason(String ratingreason) {
+        this.ratingreason = ratingreason;
+    }
+
     public String getEmpID() {
         return empID;
     }

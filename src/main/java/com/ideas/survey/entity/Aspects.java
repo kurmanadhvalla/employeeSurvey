@@ -1,5 +1,9 @@
 package com.ideas.survey.entity;
 
+import java.util.ArrayList;
+
+
+
 
 
 import java.io.Serializable;
@@ -7,9 +11,7 @@ import javax.persistence.*;
 
 @Entity
 public class Aspects implements Serializable {
-	 	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 		@Id
 	    @GeneratedValue(strategy=GenerationType.AUTO)
@@ -17,10 +19,21 @@ public class Aspects implements Serializable {
 	    private Integer aspectId;
 		@Column(name ="aspect")
 	 	private String aspectName;
+
+	public String getAspectDetails() {
+		return aspectDetails;
+	}
+
+	public void setAspectDetails(String aspectDetails) {
+		this.aspectDetails = aspectDetails;
+	}
+
+	@Column(name="aspectdetails")
+		private String aspectDetails;
 //	 	@OneToMany(mappedBy="aspects", fetch = FetchType.LAZY)
 //	 	private Set<Feedback_Stats> Surveys = new HashSet<>(0);
-//      
-//		
+//
+//
 //		public Set<Feedback_Stats> getSurveys() {
 //			return Surveys;
 //		}
@@ -53,7 +66,4 @@ public class Aspects implements Serializable {
 		public void setAspectName(String aspectName) {
 			this.aspectName = aspectName;
 		}
-
-	 	
-	 	
 }

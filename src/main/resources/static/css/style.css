@@ -1,3 +1,25 @@
+@import url('https://fonts.googleapis.com/css?family=Lobster|Montserrat|PT+Sans|Pacifico|Roboto|Source+Sans+Pro');
+font-family: 'Roboto', sans-serif;
+font-family: 'Source Sans Pro', sans-serif;
+font-family: 'Montserrat', sans-serif;
+font-family: 'PT Sans', sans-serif;
+font-family: 'Lobster', cursive;
+font-family: 'Pacifico', cursive;
+
+
+ body,h1, h2, h3, h4, div, button {
+    font-family: Montserrat;
+
+}
+
+.navbar {
+    z-index: 1;
+}
+
+#surveyappbody
+{
+ background-color:whitesmoke;
+}
 #row{
   text-align: center;
   margin-top: 50px;
@@ -8,15 +30,21 @@
   height: 15%;
   width: 100%;
 }
+
  #header{
 	text-align: center;
 	margin-top: 50px;
 	margin-bottom: 30px;
+
+	background-color:whitesmoke;
+	color :black;
 }
 
 .star-rating{
   margin-bottom: 5px;
+
 }
+
 .star-rating span{
   font-size:20px;
 }
@@ -28,12 +56,10 @@
 	margin-bottom: 5px;
   min-height: 40px;
   max-height: 180px;
-  background-color: #92bde7;
+  background-color:whitesmoke;
+
 }
-body {
-  background: white;
-  min-height: 520px;
-}
+
 
 
 
@@ -54,6 +80,11 @@ li span {
 
 }
 
+.myClass {
+
+    color: goldenrod;
+
+}
 input[type="text"] {
     /*width: 32px;*/
     margin-right: 5px;
@@ -63,72 +94,16 @@ input[type="text"] {
 }
 
 
-
-
-body,
-h1,
-h2,
-h3,
-h4,
-div,
-button {
-  font-family: consolas, courier, monaco, menlo, monospace;
+.accordian-arrow
+{
+color: black;
+background-color:white;
 }
 
 
-.elo {
-  background: rgb(200,240,255);
-  padding: 6px 36px;
-
-  font-size: 1.2em;
-  border-radius: 4px;
-  border:0;
-  cursor: pointer;
-  color: #000;
-}
-
-.ct {
-  text-align: center
-}
-
-.two {
-  background: rgb(180,220,255);
-}
-
-.three {
-  background: rgb(160,200,255);
-}
-
-.four {
-  background: rgb(140,180,255);
-}
 
 
-.elo:hover {
-  background: dodgerblue;
-  color: #fff;
-  text-shadow: 1px 1px 1px #000;
-  box-shadow: 0 0 0 #555;
-}
-
-.multiple_elements {
-  padding: 30px 0 10px 0;
-  text-align: center;
-}
-
-/*customizing tooltip color*/
-/*right tooltip*/
 
 
-code {
-  color: royalblue;
-  background-color: azure;
-}
 
-@media (max-width:640px) {
 
-  .elo {
-    padding: 6px 12px;
-    font-size: 12px;
-  }
-}

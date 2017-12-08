@@ -40,6 +40,16 @@ public class FeedbackStats implements Serializable {
 	 @ManyToOne
 	 @JoinColumn(name="survey_id")
 	 private EmployeeSurvey employeeSurvey;
+	@Column(name="aspect_rating_reason")
+     private String ratingReason;
+
+	public String getRatingReason() {
+		return ratingReason;
+	}
+
+	public void setRatingReason(String ratingReason) {
+		this.ratingReason = ratingReason;
+	}
 
 	public FeedbackStats(Integer aspectRating, Integer aspectRanking, Aspects aspect, EmployeeSurvey employeeSurvey) {
 		this.aspectRating = aspectRating;
