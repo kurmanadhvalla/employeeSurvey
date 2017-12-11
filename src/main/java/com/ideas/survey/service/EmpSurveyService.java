@@ -32,11 +32,13 @@ public class EmpSurveyService {
 
         feedbackstatsRepository.save(feedbackStats);
     }
-    public void setTime(@RequestParam("empID") String empid, @RequestParam("surveyID") String surveyID) {
+    public void updateFeedbackTime(@RequestParam("empID") String empid, @RequestParam("surveyID") String surveyID) {
 
         Date date = new Date();
-        jdbcTemplate.update("UPDATE `employee_feedback` SET \n" +
-                "submission_date = ? ,status= 1 WHERE empid =? AND survey_id = ?;", new Object[]{date, empid, surveyID});
+
+        EmployeeSurvey employeeSurvey = employeeSurveyRepository.findByEmpidAndSurveyId(empid,Integer.valueOf(surveyID));
+        employeeSurvey.setSubmissionDate(date);
+        employeeSurveyRepository.save(employeeSurvey);
 
     }
     public void updateRanking(@RequestParam("empID") String empid, @RequestParam("surveyID") Integer surveyID, @RequestParam("aspectID") Integer aspectID, @RequestParam("ranking") Integer ranking) {
@@ -60,23 +62,22 @@ public class EmpSurveyService {
 
         List<EmployeeSurvey> employeeSurveys = employeeSurveyRepository.findByEmpidAndStatus(empid, true);
         if (employeeSurveys != null && !employeeSurveys.isEmpty()) {
-            List<FeedbackStats> feedbackStats = employeeSurveys.get(employeeSurveys.size()-1).getFeedbackStats();
-            employeeSurveys.get(employeeSurveys.size()-1).getSubmissionDate();
-           
+//            List<FeedbackStats> feedbackStats = employeeSurveys.get(employeeSurveys.size()-1).getFeedbackStats();
+//            employeeSurveys.get(employeeSurveys.size()-1).getSubmissionDate();
             return getEmployeeSurveyDetailsDTO(employeeSurveys.get(employeeSurveys.size()-1));
         } else {
             return getNewSurvey(empid);
         }
     }
 
-    List<EmployeeSurveyDetailsDTO> getEmployeeSurveyDetailsDTO(EmployeeSurvey employeeSurvey) {
+    private List<EmployeeSurveyDetailsDTO> getEmployeeSurveyDetailsDTO(EmployeeSurvey employeeSurvey) {
         ArrayList<EmployeeSurveyDetailsDTO> employeeSurveyDetailsDTOS = new ArrayList<>();
         List<FeedbackStats> feedbackStats = employeeSurvey.getFeedbackStats();
         feedbackStats.forEach(feedbackStat -> {
             EmployeeSurveyDetailsDTO dto = new EmployeeSurveyDetailsDTO();
             EmployeeSurveyDetailsDTO employeeSurveyDetailsDTO = new EmployeeSurveyDetailsDTO();
-            employeeSurveyDetailsDTO.setEmpID(feedbackStat.getEmployeeSurvey().getEmpid());
-            employeeSurveyDetailsDTO.setSurveyID(feedbackStat.getEmployeeSurvey().getSurveyId());
+            employeeSurveyDetailsDTO.setEmpID(employeeSurvey.getEmpid());
+            employeeSurveyDetailsDTO.setSurveyID(employeeSurvey.getSurveyId());
             employeeSurveyDetailsDTO.setAspectID(feedbackStat.getAspect().getAspectId());
             employeeSurveyDetailsDTO.setAspectName(feedbackStat.getAspect().getAspectName());
             employeeSurveyDetailsDTO.setAspectDescription(feedbackStat.getAspect().getAspectDetails());
@@ -92,7 +93,7 @@ public class EmpSurveyService {
     }
 
 
-    public List<EmployeeSurveyDetailsDTO> getNewSurvey(@RequestParam("empID") String empid) {
+    public  List<EmployeeSurveyDetailsDTO> getNewSurvey(@RequestParam("empID") String empid) {
         Date date = new Date();
         EmployeeSurvey survey = employeeSurveyRepository.save(new EmployeeSurvey(empid, date, false));
         int rating = 10;
@@ -104,7 +105,7 @@ public class EmpSurveyService {
         }
         List<FeedbackStats> feedbackStats = feedbackstatsRepository.findByEmployeeSurvey(survey);
 
-        survey.setFeedbackStats(feedbackStats);
+         survey.setFeedbackStats(feedbackStats);
 //        EmployeeSurvey newsurvey = employeeSurveyRepository.findByEmpidAndSurveyId(empid,survey.getSurveyId());
         return getEmployeeSurveyDetailsDTO(survey);
     }
@@ -113,8 +114,7 @@ public class EmpSurveyService {
         List<EmployeeSurvey> employeeSurveys = employeeSurveyRepository.findByEmpidAndStatusOrderBySurveyIdDesc(empid, true);
         List<List<EmployeeSurveyDetailsDTO>> finallist = new ArrayList<>();
         for (int i = 0; i < employeeSurveys.size(); i++) {
-
-            List<FeedbackStats> feedbackStats = employeeSurveys.get(i).getFeedbackStats();
+//
             finallist.add(getEmployeeSurveyDetailsDTO(employeeSurveys.get(i)));
         }
         return finallist;

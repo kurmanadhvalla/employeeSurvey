@@ -13,6 +13,7 @@ import com4j.ComException;
 import com4j.Variant;
 import com4j.typelibs.ado20.ClassFactory;
 import com4j.typelibs.ado20.Fields;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.lang.reflect.Array;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Component
 public class ActiveDirectoryDAO {
 
     private Object x;

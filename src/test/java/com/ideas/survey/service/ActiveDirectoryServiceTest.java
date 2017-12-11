@@ -4,6 +4,8 @@ import com.ideas.survey.dto.ActiveDirectoryDAO;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -12,23 +14,30 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.verify;
 
 /**
  * Created by idnvlr on 10/24/2017.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class ActiveDirectoryServiceTest {
-    ActiveDirectoryService  activeDirectoryService = new ActiveDirectoryService();
+    private String searchField= "cn";
+    private String emplName="Prasad Kunte";
+    @Mock
+    private ActiveDirectoryDAO activeDirectoryDAO;
+   @InjectMocks
+    private  ActiveDirectoryService activeDirectoryService;
     @Test
     public void  findDirectReports(){
-
-        System.out.println(activeDirectoryService.getDirectReportsfromDirectory("CN","Prasad Kunte")) ;
+        activeDirectoryService.getDirectReportsfromDirectory(searchField, emplName);
+        verify(activeDirectoryDAO).getDirectReports(searchField,emplName );
 
     }
 
     @Test
     public void findEmpID(){
-        assertEquals("E81065",activeDirectoryService.getEmployeeIDfromDirectory("CN","Prasad Kunte"));
+        activeDirectoryService.getEmployeeIDfromDirectory(searchField, emplName);
+        verify(activeDirectoryDAO).getEmpID(searchField,emplName );
     }
     
 

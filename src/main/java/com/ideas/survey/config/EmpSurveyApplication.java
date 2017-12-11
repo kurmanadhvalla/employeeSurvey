@@ -23,10 +23,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public class EmpSurveyApplication {
 
 
-//	@Override
-//	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-//		return application.sources(EmpSurveyApplication.class);
-//	}
+
 
 
 	public static void main(String[] args)

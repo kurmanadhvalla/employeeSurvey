@@ -18,5 +18,4 @@ public interface EmployeeSurveyRepository extends CrudRepository<EmployeeSurvey,
     List<EmployeeSurvey> findByEmpidAndStatus(String empid, boolean b);
 
 
-
 }

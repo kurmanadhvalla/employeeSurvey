@@ -9,10 +9,12 @@ import static org.junit.Assert.*;
  */
 public class ActiveDirectoryDAOTest {
 
+    private ActiveDirectoryDAO activeDirectoryDAO;
+
     @Test
     public void findDirectReports(){
-        ActiveDirectoryDAO dao = new ActiveDirectoryDAO();
-      dao.getDirectReports("CN", "Prasad Kunte");
+        activeDirectoryDAO = new ActiveDirectoryDAO();
+      activeDirectoryDAO.getDirectReports("CN", "Prasad Kunte");
     }
 
     @Test
